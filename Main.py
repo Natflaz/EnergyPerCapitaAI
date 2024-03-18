@@ -27,7 +27,8 @@ predictions = stacking_ensemble.predict(X_test)
 
 results = evaluate_output_model(predictions, y_test['Primary energy consumption per capita (kWh/person)'].to_numpy())
 
-print_evaluation_results(results)
+print_evaluation_results(results, model_name="Stacking Ensemble Regressor")
+
 
 """
 avec Stacking

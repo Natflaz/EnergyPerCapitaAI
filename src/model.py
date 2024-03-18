@@ -2,6 +2,8 @@ from sklearn.ensemble import BaggingRegressor
 from catboost import CatBoostRegressor
 from skopt import BayesSearchCV
 from skopt.space import Real, Categorical, Integer
+import pandas as pd
+import os
 
 
 class BaggingEnsembleRegressor:
@@ -42,3 +44,22 @@ class BaggingEnsembleRegressor:
     def predict(self, X_test):
         print("Predicting with Bagging Ensemble Regressor...")
         return self.bagging_regressor.predict(X_test)
+
+    def save_results(self, metrics, filepath='model_results.csv'):
+        data = {
+            'Modèle': 'Bagging CatBoostRegressor',
+            'Assemblage': f"{self.bagging_regressor.n_estimators} estimators, {self.bagging_regressor.max_samples} max_samples, {self.bagging_regressor.max_features} max_features",
+            'MAE': metrics['MAE'],
+            'MSE': metrics['MSE'],
+            'R2': metrics['R2']
+        }
+        df_new = pd.DataFrame([data])
+
+        if os.path.exists(filepath):
+            df_old = pd.read_csv(filepath)
+            df_result = pd.concat([df_old, df_new], ignore_index=True)
+        else:
+            df_result = df_new
+
+        df_result.to_csv(filepath, index=False)
+        print(f"Results saved to {filepath}")

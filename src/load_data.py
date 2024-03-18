@@ -53,5 +53,11 @@ avec Moyenne
   MAE: 2074.8787226045893
   R2: 0.9891132387103754
   
+  Z scaler MedianScaler MinMaxScaler
+  
+  rechercher sur un seul param pour la recherche bayesienne
+  
+  voir si tous les caractéristiques 
+  
   
 """

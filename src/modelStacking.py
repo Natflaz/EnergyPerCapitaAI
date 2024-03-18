@@ -5,6 +5,9 @@ from skopt import BayesSearchCV
 from skopt.space import Real, Integer
 from xgboost.sklearn import XGBRegressor
 from sklearn.ensemble import RandomForestRegressor
+import pandas as pd
+import os
+
 
 
 class StackingEnsembleRegressor:
@@ -63,3 +66,7 @@ class StackingEnsembleRegressor:
     def predict(self, X_test):
         print("Predicting with Stacking Ensemble Regressor...")
         return self.stackingRegressor.predict(X_test)
+
+
+        df_result.to_csv(filepath, index=False)
+        print(f"Results saved to {filepath}")
