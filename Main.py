@@ -1,7 +1,8 @@
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 from src.evaluate import evaluate_output_model, print_evaluation_results
-from src.init import X_train, X_test, y_train, y_test
+from src.init import split_data
+from src.load_data import load_and_preprocess_data
 from src.modelStacking import StackingEnsembleRegressor
 from src.model import BaggingEnsembleRegressor
 
@@ -19,16 +20,25 @@ print("Primary energy consumption per capita (kWh/person)")
 #Bagging.fit(X_train, y_train['Primary energy consumption per capita (kWh/person)'])
 #predictions = Bagging.predict(X_test)
 """
+
 stacking_ensemble = StackingEnsembleRegressor()
 
-stacking_ensemble.fit(X_train, y_train)
+df = load_and_preprocess_data(temp_exclude_column=[])
+columns_to_iterate = [col for col in df.columns if col not in ['Primary energy consumption per capita (kWh/person)']]
 
-predictions = stacking_ensemble.predict(X_test)
+for col in columns_to_iterate:
+    df = load_and_preprocess_data(temp_exclude_column=col)
 
-results = evaluate_output_model(predictions, y_test['Primary energy consumption per capita (kWh/person)'].to_numpy())
+    X_train, X_test, y_train, y_test = split_data(df)
 
-print_evaluation_results(results, model_name="Stacking Ensemble Regressor")
+    stacking_ensemble.fit(X_train, y_train)
 
+    predictions = stacking_ensemble.predict(X_test)
+
+    results = evaluate_output_model(predictions,
+                                    y_test['Primary energy consumption per capita (kWh/person)'].to_numpy())
+
+    print_evaluation_results(results, model_name=f"Stacking Ensemble Regressor with Normalizer without {col} column",)
 
 """
 avec Stacking
